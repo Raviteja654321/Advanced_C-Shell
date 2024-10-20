@@ -191,17 +191,19 @@ void cd(char **arg, int no, char *wrkdir, char *strdir, char *prevdir)
         char temp[1000];
         strcpy(temp, wrkdir);
         path = (char *)calloc(1000, sizeof(char));
+        int mystr = 0;
+
         if (strncmp(arg[1], "/", 1))
         {
             if (wrkdir[0] == '~')
             {
             there:
-                int str = 0;
+                mystr = 0;
                 int len = strlen(arg[1]);
                 if (arg[1][0] == '~')
                 {
                     strcpy(wrkdir, "~");
-                    str = 2;
+                    mystr = 2;
                     len = len - 2;
                 }
                 if (strcmp(wrkdir, "~"))
@@ -215,7 +217,7 @@ void cd(char **arg, int no, char *wrkdir, char *strdir, char *prevdir)
                     }
                     strcat(path, "/");
                 }
-                strncat(path, &arg[1][str], len);
+                strncat(path, &arg[1][mystr], len);
 
                 DIR *dir = opendir(path);
                 if (dir)
@@ -223,7 +225,7 @@ void cd(char **arg, int no, char *wrkdir, char *strdir, char *prevdir)
                     strcpy(prevdir, temp);
                     closedir(dir);
                     strcat(wrkdir, "/");
-                    strncat(wrkdir, &arg[1][str], len);
+                    strncat(wrkdir, &arg[1][mystr], len);
                     fix(wrkdir, strdir, 1);
                     // printf("%s\n", wrkdir);
                     change(wrkdir, strdir);
